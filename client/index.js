@@ -1,19 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import "./style/style.css";
+import React from "react";
+import ReactDOM from "react-dom";
 import ApolloClient from "apollo-client";
 import { ApolloProvider } from "react-apollo";
+import MovieList from "./components/movie-list";
+import MovieCreate from "./components/movie-create";
+import MovieDetail from "./components/movie-detail";
+import { Router, Route, hashHistory, IndexRedirect } from "react-router";
 
-const client = new ApolloClient ({});
+const client = new ApolloClient({
+  dataIdFromObject: (o) => o.id,
+});
 
 const Root = () => {
   return (
-  <ApolloProvider client={client}>
-    <h1>Bienvenue sur GraphQL Movie ;)</h1>
-  </ApolloProvider>
-  )
+    <ApolloProvider client={client}>
+      <Router history={hashHistory}>
+        <Route path="/">
+          <IndexRedirect to="movies"></IndexRedirect>
+        </Route>
+        <Route path="movies" component={MovieList}></Route>
+        <Route path="movies/create" component={MovieCreate}></Route>
+        <Route path="movie/:id" component={MovieDetail}></Route>
+      </Router>
+    </ApolloProvider>
+  );
 };
 
-ReactDOM.render(
-  <Root />,
-  document.querySelector('#root')
-);
+ReactDOM.render(<Root />, document.querySelector("#root"));
